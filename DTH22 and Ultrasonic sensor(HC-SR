@@ -1,0 +1,70 @@
+#include<DHT.h>
+
+#define dht_pin 15
+#define dht_Type DHT22
+#define LED 5 
+#define LED2 4
+#define TRIGGER_PIN 12 
+#define ECHO_PIN 14
+
+
+DHT dht(dht_pin, dht_Type );
+
+
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(115200);
+pinMode(TRIGGER_PIN, OUTPUT); 
+pinMode(ECHO_PIN, INPUT);
+pinMode(LED , OUTPUT);
+pinMode(LED2 , OUTPUT);
+dht.begin() ;
+}
+
+void loop()
+{
+long duration, distance; // Variables to hold the pulse duration and calculated distance
+// Trigger ultrasonic sensor
+digitalWrite(TRIGGER_PIN, LOW);
+delayMicroseconds(2);
+digitalWrite(TRIGGER_PIN, HIGH);
+delayMicroseconds(10);
+digitalWrite(TRIGGER_PIN, LOW);
+// Measure the pulse duration from the echo pin
+duration = pulseIn(ECHO_PIN, HIGH);
+// Calculate distance in centimetres (speed of sound is ~0.0343 cm/microsecond)
+distance = duration * 0.0343 / 2;
+// Print distance to serial monitor
+Serial.print("Distance: ");
+Serial.print(distance);
+Serial.println(" cm");
+
+ float temperature= dht.readTemperature();
+
+Serial.print("Temp:  "  );
+Serial.print(temperature);
+Serial.println("°C");
+
+float Humidity= dht.readHumidity();
+
+
+Serial.print("Hum:  "  );
+Serial.print(Humidity);
+Serial.println("%");
+
+delay(1000);
+
+if (temperature <= 30 && Humidity <=40 && distance<=10)
+{
+
+digitalWrite(LED,HIGH);
+digitalWrite(LED2,LOW);
+} 
+else {
+
+digitalWrite(LED,LOW);
+digitalWrite(LED2,HIGH);
+}
+delay(500); // Wait for stability
+}
+
