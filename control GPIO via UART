@@ -1,0 +1,21 @@
+void setup() {
+// put your setup code here, to run once:
+Serial.begin(115200);
+pinMode(2, OUTPUT);
+
+}
+
+void loop() {
+  char c;
+if(Serial.available()>0){
+char c=Serial.read();
+
+if(c=='1'){
+digitalWrite(2,HIGH);
+}
+else if(c=='2'){
+digitalWrite(2,LOW);
+}
+}
+delay (1000);
+}
